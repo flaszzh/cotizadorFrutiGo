@@ -1,0 +1,52 @@
+def cotizar_pcs(costo_yenes):
+    """
+    Calcula el costo total en soles peruanos para un lote de PCs comprado en Japón.
+    
+    Parámetros:
+    costo_yenes (float): Costo del lote en yenes japoneses (JPY)
+    
+    Retorna:
+    dict: Un diccionario con todos los valores intermedios y el costo final
+    """
+    
+    # Tasas de conversión (pueden ser actualizadas según sea necesario)
+    IDR_A_USD = 0.000061  # 1 IDR = 0.000061 USD
+    USD_A_PEN = 3.56      # 1 USD = 3.56 PEN
+    FEE_WISE = 0.053      # 5.3% de fee por transferencia
+    
+    # Paso 1: Convertir JPY a IDR (Yenes a Rupias Indonesias)
+    costo_idr = (costo_yenes + 200) * 123
+    
+    # Paso 2: Convertir IDR a USD
+    costo_usd = costo_idr * IDR_A_USD
+    
+    # Paso 3: Calcular fee de Wise (5.3% del monto en USD)
+    fee_wise = costo_usd * FEE_WISE
+    
+    # Paso 4: Sumar el fee al costo en USD
+    costo_total_usd = costo_usd + fee_wise
+    
+    # Paso 5: Convertir USD a PEN (Soles Peruanos)
+    costo_total_pen = costo_total_usd * USD_A_PEN
+    
+    return {
+        'Costo en JPY': costo_yenes,
+        'Costo en IDR': costo_idr,
+        'Costo en USD (antes de fees)': costo_usd,
+        'Fee de Wise (5.3%)': fee_wise,
+        'Costo total en USD': costo_total_usd,
+        'Costo total en PEN': costo_total_pen
+    }
+
+# Ejemplo de uso
+if __name__ == "__main__":
+    costo_jpy = float(input("Ingrese el costo del lote en JPY (yenes): "))
+    resultado = cotizar_pcs(costo_jpy)
+    
+    print("\nDetalle de la cotización:")
+    print(f"Costo en JPY: {resultado['Costo en JPY']:.2f}")
+    print(f"Convertido a IDR: {resultado['Costo en IDR']:.2f}")
+    print(f"Convertido a USD: {resultado['Costo en USD (antes de fees)']:.6f}")
+    print(f"Fee de Wise (5.3%): {resultado['Fee de Wise (5.3%)']:.6f}")
+    print(f"Costo total en USD: {resultado['Costo total en USD']:.6f}")
+    print(f"Costo total en PEN: {resultado['Costo total en PEN']:.2f}")
