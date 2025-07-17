@@ -1,52 +1,152 @@
-def cotizar_pcs(costo_yenes):
-    """
-    Calcula el costo total en soles peruanos para un lote de PCs comprado en Japón.
-    
-    Parámetros:
-    costo_yenes (float): Costo del lote en yenes japoneses (JPY)
-    
-    Retorna:
-    dict: Un diccionario con todos los valores intermedios y el costo final
-    """
-    
-    # Tasas de conversión (pueden ser actualizadas según sea necesario)
-    IDR_A_USD = 0.000061  # 1 IDR = 0.000061 USD
-    USD_A_PEN = 3.56      # 1 USD = 3.56 PEN
-    FEE_WISE = 0.053      # 5.3% de fee por transferencia
-    
-    # Paso 1: Convertir JPY a IDR (Yenes a Rupias Indonesias)
-    costo_idr = (costo_yenes + 200) * 123
-    
-    # Paso 2: Convertir IDR a USD
-    costo_usd = costo_idr * IDR_A_USD
-    
-    # Paso 3: Calcular fee de Wise (5.3% del monto en USD)
-    fee_wise = costo_usd * FEE_WISE
-    
-    # Paso 4: Sumar el fee al costo en USD
-    costo_total_usd = costo_usd + fee_wise
-    
-    # Paso 5: Convertir USD a PEN (Soles Peruanos)
-    costo_total_pen = costo_total_usd * USD_A_PEN
-    
-    return {
-        'Costo en JPY': costo_yenes,
-        'Costo en IDR': costo_idr,
-        'Costo en USD (antes de fees)': costo_usd,
-        'Fee de Wise (5.3%)': fee_wise,
-        'Costo total en USD': costo_total_usd,
-        'Costo total en PEN': costo_total_pen
-    }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cotizador de PCs Japonesas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        input, button {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #resultado {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        .result-item {
+            margin: 8px 0;
+            padding: 8px;
+            background: #eef7ff;
+            border-radius: 4px;
+        }
+        .currency {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cotizador de PCs Japonesas</h1>
+        <p>Ingresa el costo en JPY (yenes japoneses):</p>
+        <input type="number" id="costoJPY" placeholder="Ejemplo: 50000">
+        <button onclick="calcular()">Calcular Cotización</button>
+        
+        <div id="resultado" style="display: none;">
+            <h3>Detalle de la Cotización:</h3>
+            <div id="result-content"></div>
+        </div>
+    </div>
 
-# Ejemplo de uso
-if __name__ == "__main__":
-    costo_jpy = float(input("Ingrese el costo del lote en JPY (yenes): "))
-    resultado = cotizar_pcs(costo_jpy)
-    
-    print("\nDetalle de la cotización:")
-    print(f"Costo en JPY: {resultado['Costo en JPY']:.2f}")
-    print(f"Convertido a IDR: {resultado['Costo en IDR']:.2f}")
-    print(f"Convertido a USD: {resultado['Costo en USD (antes de fees)']:.6f}")
-    print(f"Fee de Wise (5.3%): {resultado['Fee de Wise (5.3%)']:.6f}")
-    print(f"Costo total en USD: {resultado['Costo total en USD']:.6f}")
-    print(f"Costo total en PEN: {resultado['Costo total en PEN']:.2f}")
+    <script>
+        function calcular() {
+            // Obtener valor ingresado
+            const costoJPY = parseFloat(document.getElementById('costoJPY').value);
+            
+            // Validar entrada
+            if (isNaN(costoJPY) || costoJPY <= 0) {
+                alert("Por favor ingresa un valor válido en JPY");
+                return;
+            }
+            
+            // Calcular cotización
+            const resultado = cotizar_pcs(costoJPY);
+            
+            // Mostrar resultados
+            mostrarResultado(resultado);
+        }
+
+        function cotizar_pcs(costo_yenes) {
+            // Tasas de conversión (puedes actualizarlas cuando necesites)
+            const IDR_A_USD = 0.000061;  // 1 IDR = 0.000061 USD
+            const USD_A_PEN = 3.56;      // 1 USD = 3.56 PEN
+            const FEE_WISE = 0.053;     // 5.3% de fee por transferencia
+            
+            // Paso 1: Convertir JPY a IDR (Yenes a Rupias Indonesias)
+            const costo_idr = (costo_yenes + 200) * 123;
+            
+            // Paso 2: Convertir IDR a USD
+            const costo_usd = costo_idr * IDR_A_USD;
+            
+            // Paso 3: Calcular fee de Wise (5.3% del monto en USD)
+            const fee_wise = costo_usd * FEE_WISE;
+            
+            // Paso 4: Sumar el fee al costo en USD
+            const costo_total_usd = costo_usd + fee_wise;
+            
+            // Paso 5: Convertir USD a PEN (Soles Peruanos)
+            const costo_total_pen = costo_total_usd * USD_A_PEN;
+            
+            return {
+                'Costo en JPY': costo_yenes,
+                'Costo en IDR': costo_idr,
+                'Costo en USD (antes de fees)': costo_usd,
+                'Fee de Wise (5.3%)': fee_wise,
+                'Costo total en USD': costo_total_usd,
+                'Costo total en PEN': costo_total_pen
+            };
+        }
+
+        function mostrarResultado(resultado) {
+            const resultDiv = document.getElementById('resultado');
+            const contentDiv = document.getElementById('result-content');
+            
+            // Formatear los resultados
+            contentDiv.innerHTML = `
+                <div class="result-item">
+                    <span class="currency">JPY → IDR:</span> ${resultado['Costo en JPY'].toLocaleString('es-PE', {maximumFractionDigits: 2})} ¥ → ${resultado['Costo en IDR'].toLocaleString('es-PE', {maximumFractionDigits: 2})} IDR
+                </div>
+                <div class="result-item">
+                    <span class="currency">IDR → USD:</span> ${resultado['Costo en USD (antes de fees)'].toLocaleString('es-PE', {maximumFractionDigits: 6})} $
+                </div>
+                <div class="result-item">
+                    <span class="currency">Fee Wise (5.3%):</span> ${resultado['Fee de Wise (5.3%)'].toLocaleString('es-PE', {maximumFractionDigits: 6})} $
+                </div>
+                <div class="result-item">
+                    <span class="currency">Total USD:</span> ${resultado['Costo total en USD'].toLocaleString('es-PE', {maximumFractionDigits: 6})} $
+                </div>
+                <div class="result-item" style="background: #e1f5fe; font-weight: bold;">
+                    <span class="currency">Total PEN:</span> S/ ${resultado['Costo total en PEN'].toLocaleString('es-PE', {maximumFractionDigits: 2)}
+                </div>
+            `;
+            
+            // Mostrar el contenedor de resultados
+            resultDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
